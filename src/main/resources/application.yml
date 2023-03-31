@@ -1,0 +1,17 @@
+server:
+    port: 9001
+uri:
+  api:
+    clients: http://localhost:9000
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: clients
+          uri: ${uri.api.clients}
+          predicates:
+            - Path=/clients/**
+          filters:
+            - RewritePath=/clients, /v1/api/clients
+            - AddRequestHeader=X-Request-Client, gateway
+            - AddResponseHeader=X-Response-Client, gateway
